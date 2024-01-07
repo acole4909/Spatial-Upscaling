@@ -3,11 +3,12 @@ title: "Spatial Upscaling"
 author: "Amanda Cole"
 date: "2023-12-17"
 output:
+  pdf_document: default
   html_document:
     code_folding: hide
 ---
 # 2.1 Literature
-Random cross-validation is a type of cross-validation (a technqiue where a dataset is split into equally sized subsets or folds) where data is randomly divided into folds^1^. In random cross-validation, data is assumed to be independent and identically distributed and no structure or order of the datset is taken into account. Random division of data into folds causes an issue when structural dependencies, such as spatial autocorrelation (when values of variables that are geographically close to one another are similar) are present in the data^2. In cases where data are geographically clustered and geographically close variables are correlated, spatial cross-validation should be used. In spatial cross-validation, data is divided into folds based on geography. Because spatial cross-validation takes into account the spatial relationships of the data, this can improve model accuracy and applicability^2^.
+Random cross-validation is a type of cross-validation (a technqiue where a dataset is split into equally sized subsets or folds) where data is randomly divided into folds^1^. In random cross-validation, data is assumed to be independent and identically distributed and no structure or order of the datset is taken into account. Random division of data into folds causes an issue when structural dependencies, such as spatial autocorrelation (when values of variables that are geographically close to one another are similar) are present in the data^2. In cases where data are geographically clustered and geographically close variables are correlated, spatial cross-validation is a strategy that can be used. In spatial cross-validation, data is divided into folds based on geography. Because spatial cross-validation takes into account the spatial relationships of the data, this can improve model accuracy and applicability^2^.
 
 An alternative to measuring distance as a geographical distance in a Euclidean space that considers the task of spatial upscaling on environmental covariates more directly could be to measure distance by classes within which the data are generated or temporal proximity. In this dataset for example, leaf nitrogen content will differ based on plant species meaning that although two areas of forest may be farther apart in terms of geographical distance, they will present leaf nitrogen content values that are more similar than than an area of forest and a cropland that are close together in terms of geographical distance. In this dataset, covariates of mean temperature and mean daily irradiance will differ temporally. 
 
