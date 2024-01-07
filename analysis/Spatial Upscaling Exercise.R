@@ -46,6 +46,7 @@ modcv <- caret::train(
 )
 
 metrics_byfold <- modcv$resample
+print(metrics_byfold)
 
 saveRDS(modcv,
         here::here("data/modcv_for_leafN.rds"))
@@ -249,10 +250,7 @@ group_folds_test_env <- purrr::map(
   }
 )
 
-
 target <- dfs$leafN
-is.vector(target)
-
 
 train_test_by_fold <- function(dfs, idx_train, idx_val){
 

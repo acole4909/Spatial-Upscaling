@@ -241,3 +241,75 @@ The RMSE and R^2^ across the five folds are as follows:
 ```{r echo=FALSE}
 out
 ```
+
+The random cross-validation had a lower RMSE than the spatial cross-validation and a higher RSQ.
+
+#2.4 Environmental Cross-Validation
+```{r echo=TRUE}
+dfs <- as.data.frame(dfs, cell = TRUE)
+clusters <- kmeans(
+  dfs[, 5:6],
+  centers = 5
+)
+dfs$cluster <- clusters$cluster
+
+group_folds_train <- purrr::map(
+  seq(length(unique(dfs$cluster))),
+  ~ {
+    dfs |>
+      select(cluster) |>
+      mutate(idx = 1:n()) |>
+      filter(cluster != .) |>
+      pull(idx)
+  }
+)
+
+group_folds_test_env <- purrr::map(
+  seq(length(unique(dfs$cluster))),
+  ~ {
+    dfs |>
+      select(cluster) |>
+      mutate(idx = 1:n()) |>
+      filter(cluster == .) |>
+      pull(idx)
+  }
+)
+```
+```{r echo=TRUE}
+target <- dfs$leafN
+
+train_test_by_fold <- function(dfs, idx_train, idx_val){
+
+  mod <- ranger::ranger(
+    x =  dfs[idx_train, 2:9],  # data frame with columns corresponding to predictors
+    y =  target[idx_train],  # a vector of the target values (not a data frame!)
+  )
+
+  pred <- predict(mod,       # the fitted model object
+                  data = dfs[idx_val, 2:9] # a data frame with columns corresponding to predictors
+  )
+
+  tmp <- dfs[idx_val,]
+  tmp$preds <- predictions(pred)
+
+  rsq <- yardstick::rsq(tmp, "leafN", "preds") # the R-squared determined on the validation set
+  rmse <- yardstick::rmse(tmp, "leafN", "preds") # the root mean square error on the validation set
+
+  return(tibble(rsq = rsq, rmse = rmse))
+}
+
+# apply function on each custom fold and collect validation results in a nice
+# data frame
+out <- purrr::map2_dfr(
+  group_folds_train,
+  group_folds_test,
+  ~train_test_by_fold(dfs, .x, .y)
+) |>
+  mutate(test_fold = 1:5)
+```
+```{r echo=FALSE}
+out
+```
+
+The spatial cross-validation had higher RMSE than the environmental cross-validation. The environmental cross-validation has a higher RSQ than the spatial cross-validation.
+
