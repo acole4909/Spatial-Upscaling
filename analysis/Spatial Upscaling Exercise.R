@@ -95,7 +95,8 @@ ggplot() +
   # plot points on map
   geom_point(data = dfs, aes(x = lon, y = lat), color = "red", size = 0.2) +
   labs(x = "", y = "") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ggtitle("Figure 1. Location of Data Points")
 
 #### 2.3.2 Perform Spatial Cross Validation
 ### Identify geographical clusters using k-means algorithm
@@ -122,7 +123,8 @@ p2 <- ggplot() +
   geom_point(data = dfs, aes(x = lon, y = lat, group=cluster), size = 0.2) +
   scale_color_manual(values = c("1" = "blue", "2" = "green", "3" = "red", "4"="yellow", "5"="pink")) +
   labs(x = "", y = "") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ggtitle("Figure 2. Spatial Clusters")
 
 p2 +
   aes(color = factor(cluster)) +
@@ -149,7 +151,8 @@ p3 <- ggplot() +
   # plot lat and long points on map by cluster
   geom_point(data = dfs, aes(x = lon, y = lat, group=cluster), color = factor(dfs$leafN), size = 0.2) +
   labs(x = "", y = "") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ggtitle("Figure 3. LeafN Clusters")
 
 p3 +
   aes(color = factor(dfs$leafN)) +

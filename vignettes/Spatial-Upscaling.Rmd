@@ -3,9 +3,9 @@ title: "Spatial Upscaling"
 author: "Amanda Cole"
 date: "2023-12-17"
 output:
-  pdf_document: default
   html_document:
     code_folding: hide
+  pdf_document: default
 ---
 # 2.1 Literature
 Random cross-validation is a type of cross-validation (a technqiue where a dataset is split into equally sized subsets or folds) where data is randomly divided into folds^1^. In random cross-validation, data is assumed to be independent and identically distributed and no structure or order of the datset is taken into account. Random division of data into folds causes an issue when structural dependencies, such as spatial autocorrelation (when values of variables that are geographically close to one another are similar) are present in the data^2. In cases where data are geographically clustered and geographically close variables are correlated, spatial cross-validation is a strategy that can be used. In spatial cross-validation, data is divided into folds based on geography. Because spatial cross-validation takes into account the spatial relationships of the data, this can improve model accuracy and applicability^2^.
@@ -95,7 +95,8 @@ ggplot() +
   # plot points on map
   geom_point(data = dfs, aes(x = lon, y = lat), color = "red", size = 0.2) +
   labs(x = "", y = "") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ggtitle("Figure 1. Distribution of Data Points")
 ```
 
 As shown in the above, data are heavily geographically clustered. Using random cross-validation on a dataset that is heavily geographically clustered may produce a model that has poor generalisability, i.e. is not able to make predictions for new locations. Using spatial cross-validation will allow us to produce a model that has an improved ability to make predictions for new locations.  
@@ -131,7 +132,8 @@ p2 <- ggplot() +
   geom_point(data = dfs, aes(x = lon, y = lat, group=cluster), size = 0.2) +
   scale_color_manual(values = c("1" = "blue", "2" = "green", "3" = "red", "4"="yellow", "5"="pink")) +
   labs(x = "", y = "") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") + 
+  ggtitle("Figure 2: Spatial Clusters")
 
 p2 +
   aes(color = factor(cluster)) +
@@ -161,7 +163,8 @@ p3 <- ggplot() +
   # plot lat and long points on map by cluster
   geom_point(data = dfs, aes(x = lon, y = lat, group=cluster), color = factor(dfs$leafN), size = 0.2) +
   labs(x = "", y = "") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ggtitle("Figure 3. LeafN Clusters")
 
 p3 +
   aes(color = factor(dfs$leafN)) +
